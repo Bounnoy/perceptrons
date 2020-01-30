@@ -1,4 +1,5 @@
-# Bounnoy Phanthavong, Homework 1
+# Bounnoy Phanthavong (ID: 973081923)
+# Homework 1
 #
 # This is a machine learning program that models a perceptron.
 # We train 10 perceptrons to recognize digits from a bunch of images.
@@ -8,6 +9,7 @@
 from pathlib import Path
 import numpy as np
 import csv
+import pickle
 
 class perceptron:
     def __init__(self, train, test, output):
@@ -158,6 +160,8 @@ class perceptron:
 
 if __name__ == '__main__':
 
+    pklTrain = Path("mnist_train.pkl")
+    pklTest = Path("mnist_test.pkl")
     fileTrain = Path("mnist_train.csv")
     fileTest = Path("mnist_test.csv")
 
@@ -167,8 +171,26 @@ if __name__ == '__main__':
     if not fileTest.exists():
         sys.exit("mnist_test.csv not found")
 
-    train = np.genfromtxt("mnist_train.csv", delimiter=",")
-    test = np.genfromtxt("mnist_test.csv", delimiter=",")
+    if not pklTrain.exists():
+        f = np.genfromtxt("mnist_train.csv", delimiter=",")
+        csv = open("mnist_train.pkl", 'wb')
+        pickle.dump(f, csv)
+        csv.close()
+
+    if not pklTest.exists():
+        f = np.genfromtxt("mnist_test.csv", delimiter=",")
+        csv = open("mnist_test.pkl", 'wb')
+        pickle.dump(f, csv)
+        csv.close()
+
+    file = open("mnist_train.pkl", "rb")
+    train = pickle.load(file)
+    file.close()
+
+    file = open("mnist_test.pkl", "rb")
+    test = pickle.load(file)
+    file.close()
+
     output = 10
 
     p = perceptron(train, test, output)
